@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <title>Browser Automation with Geb, Spock, and Groovy</title>
+
+        <link rel="stylesheet" href="css/reveal.css">
+        <link rel="stylesheet" href="css/theme/moon.css">
+        <link rel="stylesheet" href="css/mine.css">
+
+        <!-- Theme used for syntax highlighting of code -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+
+        <!-- Printing and PDF exports -->
+        <script>
+            var link = document.createElement( 'link' );
+            link.rel = 'stylesheet';
+            link.type = 'text/css';
+            link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+            document.getElementsByTagName( 'head' )[0].appendChild( link );
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section data-markdown>
+                    <textarea data-template>
+                    # Browser Automation with Geb, Spock, and Groovy
+                    ## John Flinchbaugh
+                    ### john@hjsoft.com
+                    ### http://hjsoft.com/blog/
+                    </textarea>
+                </section>
+                <section data-markdown>
+                    <textarea data-template>
+                    # Browser Automation is Like Magic
+                    </textarea>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            # Stack of Tooling
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## A Web App to Automate or Test
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Web Browser
+                            * Chrome
+                            * Firefox
+                            * Internet Explorer
+                            * Safari
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Third-Party Binary Driver
+                            * `chromedriver`
+                            * `geckodriver`
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## WebDriver (Java)
+                            * `'org.seleniumhq.selenium:selenium-chrome-driver:3.14.0'`
+                            * `'org.seleniumhq.selenium:selenium-firefox-driver:3.14.0'`
+                            * `'org.seleniumhq.selenium:selenium-htmlunit-driver:3.14.0'`
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Geb
+                            * Expressive API Written in Groovy
+                            * jQuery-like CSS3 Expressions
+
+                            ```
+                                go 'https://mysearch.work.com/'
+                                $('form', name: 'q') = 'nicest api'
+                                $('form input', name: 'search').click()
+                                assert $('.results .result span.title')*.text() == [
+                                    'Geb',
+                                    'Groovy',
+                                    'Spock',
+                                ]
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Spock
+                            * Expressive Test Framework Written in Groovy
+                        </textarea>
+                    </section>
+                </section>
+            </div>
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.js"></script>
+
+        <script>
+            // More info about config & dependencies:
+            // - https://github.com/hakimel/reveal.js#configuration
+            // - https://github.com/hakimel/reveal.js#dependencies
+            Reveal.initialize({
+                transition: 'slide',
+                transitionSpeed: 'fast',
+                dependencies: [
+                    { src: 'plugin/markdown/marked.js' },
+                    { src: 'plugin/markdown/markdown.js' },
+                    { src: 'plugin/notes/notes.js', async: true },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+                ]
+            });
+        </script>
+    </body>
+</html>
