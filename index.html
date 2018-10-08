@@ -312,12 +312,20 @@
                                         and: 'every result mentions geb'
                                             resultTitles()*.text().collect {
                                                 it.contains('Geb')
-                                            }
+                                            }.every()
                                     }
                                 }
                             ```
                         </textarea>
                     </section>
+                </section>
+                <section data-markdown>
+                    <textarea data-template>
+                    # The End (...or Beginning)
+                    ## John Flinchbaugh
+                    ### john@hjsoft.com
+                    ### http://hjsoft.com/blog/
+                    </textarea>
                 </section>
             </div>
         </div>
