@@ -41,7 +41,7 @@
                 <section>
                     <section data-markdown>
                         <textarea data-template>
-                            # Stack of Tooling
+                            # Layers of Abstraction
                         </textarea>
                     </section>
                     <section data-markdown>
@@ -115,6 +115,207 @@
                             * Metaprogramming
                             * Fun!
                             * Still Just JVM Bytecode
+                        </textarea>
+                    </section>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            # Let's Code
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Initialize a Gradle Project
+                            ```
+                                % gradle init --type java-library --test-framework spock
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Add Geb and Webdriver
+                            `build.gradle`
+                            ```
+                                dependencies {
+                                    testImplementation 'org.seleniumhq.selenium:selenium-chrome-driver:3.14.0'
+                                    testImplementation 'org.gebish:geb-spock:2.2'
+                                    // testImplementation 'org.gebish:geb-core:2.2'
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Geb Spec
+                            `src/test/PokerFunctionalSpec.groovy`
+                            ```
+                                import geb.spock.*
+                                import geb.*
+                                import spock.lang.*
+
+                                class PokerFunctionalSpec extends GebReportingSpec {
+                                    void 'it shows all the cards'() {
+                                        given: 'we go to the poker app'
+                                            go 'file:///Users/jflinchbaugh/my/poker-jquery/index.html'
+                                        expect:
+                                            $('.card')*.text() == []
+                                    }
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Configure Geb
+                            `src/test/GebConfig.groovy`
+                            ```
+                                reportsDir = new File('build/reports/geb')
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Output Test Failures
+                            `build.gradle`
+                            ```
+                                test {
+                                    testLogging {
+                                        showStandardStreams = true
+                                        events 'failed', 'passed'
+                                        exceptionFormat 'full'
+                                    }
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Click the Cards
+                            `src/test/PokerFunctionalSpec.groovy`
+                            ```
+                                void 'clicking each card shows it big'() {
+                                    given: 'we go to the poker app'
+                                        go url
+                                    when: 'we click the card'
+                                        $('.card', text: '1').click()
+                                    then: 'see the big card'
+                                        $('.show').text() == '1'
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Slow It Down
+                            `src/test/PokerFunctionalSpec.groovy`
+                            ```
+                                void cleanup() {
+                                    sleep 2000
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Repeat and Unroll
+                            `src/test/PokerFunctionalSpec.groovy`
+                            ```
+                                @Unroll
+                                void 'clicking the #estimate card shows it big'() {
+                                    given: 'we go to the poker app'
+                                        go url
+                                    when: 'we click the card'
+                                        $('.card', text: estimate).click()
+                                    then: 'see the big card'
+                                        $('.show').text() == estimate
+                                    where:
+                                        estimate << [ 1, 2, 3 ]*.toString()
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Wait For Asynchronous Events
+                            `src/test/PokerFunctionalSpec.groovy`
+                            ```
+                                waitFor { $('.show').text() } == estimate
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Page Model
+                            `src/test/GooglePage.groovy`
+                            ```
+                                import geb.*
+
+                                class GooglePage extends Page {
+                                    static at = {
+                                        title == 'Google'
+                                    }
+
+                                    static url = 'https://www.google.com/'
+
+                                    static content = {
+                                        form { $('form') }
+                                        submit { $('form input', name: 'btnK', 0) }
+                                    }
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Page Model
+                            `src/test/GoogleSearchPage.groovy`
+                            ```
+                                import geb.*
+
+                                class GoogleSearchPage extends Page {
+                                    static at = {
+                                        title ==~ /.* Google Search/
+                                    }
+
+                                    static content = {
+                                        resultTitles { $('h3') }
+                                    }
+                                }
+                            ```
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Google Spec
+                            `src/test/GoogleFunctionalSpec.groovy`
+                            ```
+                                import geb.spock.*
+                                import geb.*
+                                import spock.lang.*
+
+                                class GoogleFunctionalSpec extends GebReportingSpec {
+                                    void cleanup() {
+                                        sleep 2000
+                                    }
+
+                                    void 'google searches'() {
+                                        given: 'we go to google'
+                                            to GooglePage
+                                        when: 'we submit a search'
+                                            form.q = 'geb spock'
+                                            waitFor { submit().click() }
+                                        then: 'we land at the search page'
+                                            at GoogleSearchPage
+                                        and: 'there are results'
+                                            resultTitles()*.text()
+                                        and: 'every result mentions geb'
+                                            resultTitles()*.text().collect {
+                                                it.contains('Geb')
+                                            }
+                                    }
+                                }
+                            ```
                         </textarea>
                     </section>
                 </section>
