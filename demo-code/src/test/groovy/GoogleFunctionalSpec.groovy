@@ -19,7 +19,7 @@ class GoogleFunctionalSpec extends GebReportingSpec {
             resultTitles()*.text()
         and: 'every result mentions geb'
             resultTitles()*.text().collect {
-                it.contains('Geb')
+                it ==~ /(?i).*Geb.*/
             }.every()
     }
 }

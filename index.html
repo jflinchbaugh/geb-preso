@@ -27,6 +27,14 @@
             <div class="slides">
                 <section data-markdown>
                     <textarea data-template>
+                        # Capital Area Software Engineers
+                        ## WIFI
+                        * AP: VCS Guest
+                        * PW: VersatileCASE
+                    </textarea>
+                </section>
+                <section data-markdown>
+                    <textarea data-template>
                     # Browser Automation with Geb, Spock, and Groovy
                     ## John Flinchbaugh
                     ### john@hjsoft.com
@@ -311,7 +319,7 @@
                                             resultTitles()*.text()
                                         and: 'every result mentions geb'
                                             resultTitles()*.text().collect {
-                                                it.contains('Geb')
+                                                it ==~ /(?i).*geb.*/
                                             }.every()
                                     }
                                 }
