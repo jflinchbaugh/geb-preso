@@ -1,0 +1,31 @@
+.card {
+    display: inline-block;
+    width: 25vw;
+    height: 10vh;
+    font-size: 10vmin;
+    border: 1px solid black;
+    margin: 1vmin;
+    padding-top: 2vh;
+    padding-bottom: 1vh;
+    background: lightblue;
+    border-radius: 20px;
+}
+
+.show {
+    border: 1px solid black;
+    background: lightblue;
+    font-size: 40vmin;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10vh;
+    padding-bottom: 10vh;
+    display: inline-block;
+    border-radius: 40px;
+    width: 90%;
+    height: 75%;
+}
+
+body {
+    padding-top: 10vh;
+    text-align: center;
+}
